@@ -304,4 +304,10 @@ $RECYCLE.BIN/
 # Windows shortcuts
 *.lnk
 
+# Image
+img/*
+
+#csv
+books_to_scrap.csv
+
 # End of https://www.toptal.com/developers/gitignore/api/python,linux,macos,windows,jetbrains+all
