@@ -19,7 +19,7 @@ if __name__ == '__main__':
             book_to_display = book
             # get all books data from books url
             product_info = get_product_info(book)
-            # save all books data into a collection
+            # save all books data into a list
             products_info.append(product_info)
 
     # Write all products into a CSV
