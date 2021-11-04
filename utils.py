@@ -3,6 +3,13 @@ import requests
 from bs4 import BeautifulSoup
 
 
+def save_image(image_url):
+    # split the image url to get filename and save the image to local directory 'img/'
+    filename = image_url.split("/")[-1]
+    with open('img/' + filename, "wb") as f:
+        f.write(requests.get(image_url).content)
+
+
 def get_category_urls(website_url):
     """Return all urls of category for a website url given.
         website_url: url of the website we want to get categories.
@@ -81,22 +88,17 @@ def get_product_info(book_url):
         price_excluding_tax = product_information[2]
         number_available = product_information[5]
         product_description = soup.find("div", {"id": "product_description"})
-        if product_description:
-            product_description = product_description.findNext('p').text
-        else:
-            # prevent the no description error from Alice in Wonderland
-            # https://books.toscrape.com/catalogue/alice-in-wonderland-alices-adventures-in-wonderland-1_5/index.html
-            product_description = 'Pas de description'
+        # prevent the no description error from Alice in Wonderland
+        # https://books.toscrape.com/catalogue/alice-in-wonderland-alices-adventures-in-wonderland-1_5/index.html
+        product_description = product_description.findNext('p').text if product_description else 'Pas de description'
         category = soup.find("ul", {"class": "breadcrumb"}).findAll('li')[2].find('a').text
         review_rating = soup.findAll('p', {"class": "star-rating"})[0]['class'][1]
         div_image = soup.find('div', {"class": "item active"})
         image_url = div_image.find('img')['src']
         image_url = image_url.replace('../../', 'http://books.toscrape.com/')
 
-        # split the image url to get filename and save the image to local directory 'img/'
-        filename = image_url.split("/")[-1]
-        with open('img/' + filename, "wb") as f:
-            f.write(requests.get(image_url).content)
+        # save the image of the book into the 'img' folder
+        save_image(image_url)
 
         # save the data into a collection and return them
         product_info = {
