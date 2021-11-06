@@ -1,4 +1,5 @@
 import csv
+import os
 import requests
 from bs4 import BeautifulSoup
 
@@ -112,11 +113,14 @@ def get_product_info(book_url):
 def save_image(image_url):
     # split the image url to get filename and save the image to local directory 'img/'
     filename = image_url.split("/")[-1]
+    # create img folder if it does not exist
+    if not os.path.exists('img'):
+        os.makedirs('img')
     with open('img/' + filename, "wb") as f:
         f.write(requests.get(image_url).content)
 
 
-def create_books_csv(dict_data):
+def create_books_csv(csv_file_name, dict_data):
     """Save all books data to an svg file.
         dict_data: the list of dictionary we want to save to a svg file.
 
@@ -133,10 +137,12 @@ def create_books_csv(dict_data):
                    'category',
                    'review_rating',
                    'image_url']
-    csv_file = "books_to_scrap.csv"
     try:
-        # save all the books data into a svg file
-        with open(csv_file, 'w', encoding="utf-8") as csvfile:
+        # create img folder if it does not exist
+        if not os.path.exists('csv'):
+            os.makedirs('csv')
+        # save all the books data of a category into a svg file
+        with open('csv/' + csv_file_name + '.csv', 'w', encoding="utf-8") as csvfile:
             writer = csv.DictWriter(csvfile, fieldnames=csv_columns)
             writer.writeheader()
             for data in dict_data:
