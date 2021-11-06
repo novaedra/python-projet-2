@@ -25,10 +25,6 @@ Installer les librairies nécessaires à l'exécution du projet
 
 `pip install -r requirements.txt`
 
-Créer le répertoire 'img' pour accueillir les images des livres
-
-`mkdir img`
-
 Exécuter le script main.py
 
 `python main.py`
@@ -54,10 +50,6 @@ Activer l'environnement que vous venez de créer
 Installer les librairies nécessaires à l'exécution du projet
 
 `pip install -r requirements.txt`
-
-Créer le répertoire img pour accueillir les images des livres
-
-`mkdir img`
 
 Exécuter le script main.py
 
