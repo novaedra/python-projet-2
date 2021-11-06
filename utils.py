@@ -3,13 +3,6 @@ import requests
 from bs4 import BeautifulSoup
 
 
-def save_image(image_url):
-    # split the image url to get filename and save the image to local directory 'img/'
-    filename = image_url.split("/")[-1]
-    with open('img/' + filename, "wb") as f:
-        f.write(requests.get(image_url).content)
-
-
 def get_category_urls(website_url):
     """Return all urls of category for a website url given.
         website_url: url of the website we want to get categories.
@@ -90,7 +83,7 @@ def get_product_info(book_url):
         product_description = soup.find("div", {"id": "product_description"})
         # prevent the no description error from Alice in Wonderland
         # https://books.toscrape.com/catalogue/alice-in-wonderland-alices-adventures-in-wonderland-1_5/index.html
-        product_description = product_description.findNext('p').text if product_description else 'Pas de description'
+        product_description = product_description.findNext('p').text if product_description else 'No description'
         category = soup.find("ul", {"class": "breadcrumb"}).findAll('li')[2].find('a').text
         review_rating = soup.findAll('p', {"class": "star-rating"})[0]['class'][1]
         div_image = soup.find('div', {"class": "item active"})
@@ -100,7 +93,7 @@ def get_product_info(book_url):
         # save the image of the book into the 'img' folder
         save_image(image_url)
 
-        # save the data into a collection and return them
+        # save the data into a dictionary and return them
         product_info = {
             'product_page_url': book_url,
             'universal_product_code (upc)': universal_product_code.text,
@@ -116,9 +109,16 @@ def get_product_info(book_url):
         return product_info
 
 
+def save_image(image_url):
+    # split the image url to get filename and save the image to local directory 'img/'
+    filename = image_url.split("/")[-1]
+    with open('img/' + filename, "wb") as f:
+        f.write(requests.get(image_url).content)
+
+
 def create_books_csv(dict_data):
     """Save all books data to an svg file.
-        dict_data: the collection of dictionary we want to save to a svg file.
+        dict_data: the list of dictionary we want to save to a svg file.
 
         Returns:
             None.
